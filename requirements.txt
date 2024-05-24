@@ -5,7 +5,7 @@ flask-HTTPAuth==4.7.0
 nose2==0.10.0
 PyYAML==5.4.1
 uWSGI==2.0.22
-requests==2.31.0
+requests==2.32.2
 bcrypt==4.0.1
 sqlalchemy==2.0.23
 flask_stache==0.1.1
