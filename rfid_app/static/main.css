@@ -1,3 +1,46 @@
+:root {
+    /* Color scheme:
+     * https://paletton.com/#uid=13C0u0kepl76tuIa-pnhmgimLdJ
+     */
+    --color-primary: #2B3E55;
+    --color-secondary: #8390a0;
+    --color-tertiary: #5c6e84;
+    --color-quaternary: #192e48;
+}
+
+
+body {
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+}
+
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:link {
+    color: var(--color-secondary);
+}
+
+a:visited {
+    color: var(--color-secondary);
+}
+
+a:hover {
+    color: var(--color-tertiary);
+}
+
+a:active {
+    color: var(--color-tertiary);
+}
+
+
+.menu {
+    list-style-type: "⇨ ";
+}
+
 #error_list {
     color: red;
 }
@@ -29,12 +72,39 @@
     box-sizing: border-box;
     display: block;
     width: 100%;
+
+    color: var(--color-secondary);
+    background-color: var(--color-primary);
+
+    border: 0px;
+
+    font-weight: bold;
+    font-size: medium;
+}
+
+.activate_button:hover {
+    color: var(--color-tertiary);
+    cursor: pointer;
 }
 
 .activate_form {
     margin-bottom: 0px;
 }
 
-.activate_cell {
+table {
     border: 0px;
+}
+
+th, td {
+    border: 1px solid var(--color-quaternary);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+th {
+    color: var(--color-secondary);
+}
+
+td {
+    color: var(--color-secondary);
 }
