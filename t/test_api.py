@@ -11,9 +11,11 @@ import Doorbot.API
 import Doorbot.SQLAlchemy
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from test_oauth_token import add_bearer_token, bearer_header
 
 
 USER_PASS = ( "user", "pass" )
+TOKEN = "0123456789abcdef"
 
 class TestAPI( flask_unittest.ClientTestCase ):
     app = Doorbot.API.app
@@ -42,6 +44,7 @@ class TestAPI( flask_unittest.ClientTestCase ):
         )
 
         session = Session( engine )
+        add_bearer_token( TOKEN, member, session )
         session.add_all([ member, location ])
         session.commit()
 
@@ -116,7 +119,9 @@ class TestAPI( flask_unittest.ClientTestCase ):
         rv = client.get( '/check_tag/9012', auth = USER_PASS )
         self.assertStatus( rv, 404 )
 
-        rv = client.put( '/v1/new_tag/9012/foo', auth = USER_PASS )
+        rv = client.put( '/v1/new_tag/9012/foo',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 201 )
 
         rv = client.get( '/check_tag/9012', auth = USER_PASS )
@@ -136,13 +141,17 @@ class TestAPI( flask_unittest.ClientTestCase ):
         rv = client.get( '/check_tag/0123', auth = USER_PASS )
         self.assertStatus( rv, 200 )
 
-        rv = client.post( '/v1/deactivate_tag/0123', auth = USER_PASS )
+        rv = client.post( '/v1/deactivate_tag/0123',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 200 )
 
         rv = client.get( '/check_tag/0123', auth = USER_PASS )
         self.assertStatus( rv, 403 )
 
-        rv = client.post( '/v1/reactivate_tag/0123', auth = USER_PASS )
+        rv = client.post( '/v1/reactivate_tag/0123',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 200 )
 
         rv = client.get( '/check_tag/0123', auth = USER_PASS )
@@ -175,7 +184,8 @@ class TestAPI( flask_unittest.ClientTestCase ):
         match_quuux = re.compile( '.*,.*quuux.*', flags = re.I )
 
         rv = client.get( '/v1/search_tags?name=Bar&offset=0&limit=1',
-            auth = USER_PASS )
+            headers = bearer_header( TOKEN )
+        )
         data = rv.data.decode( "UTF-8" )
         self.assertTrue(
             match_bar.match( data ),
@@ -183,7 +193,8 @@ class TestAPI( flask_unittest.ClientTestCase ):
         )
 
         rv = client.get( '/v1/search_tags?name=bar&offset=0&limit=1',
-            auth = USER_PASS )
+            headers = bearer_header( TOKEN )
+        )
         data = rv.data.decode( "UTF-8" )
         self.assertTrue(
             match_bar.match( data ),
@@ -191,7 +202,8 @@ class TestAPI( flask_unittest.ClientTestCase ):
         )
 
         rv = client.get( '/v1/search_tags?name=quuux&offset=0&limit=1',
-            auth = USER_PASS )
+            headers = bearer_header( TOKEN )
+        )
         data = rv.data.decode( "UTF-8" )
         self.assertTrue(
             match_quuux.match( data ),
@@ -224,7 +236,8 @@ class TestAPI( flask_unittest.ClientTestCase ):
             re.MULTILINE | re.DOTALL )
 
         rv = client.get( '/v1/search_entry_log?tag=09876&offset=0&limit=1',
-            auth = USER_PASS )
+            headers = bearer_header( TOKEN )
+        )
         data = rv.data.decode( "UTF-8" )
         self.assertTrue(
             match_cleanroom.match( data ),
@@ -243,7 +256,8 @@ class TestAPI( flask_unittest.ClientTestCase ):
         session.commit()
 
         rv = client.get( '/v1/search_entry_log?tag=09876&offset=0&limit=1',
-            auth = USER_PASS )
+            headers = bearer_header( TOKEN )
+        )
         data = rv.data.decode( "UTF-8" )
         self.assertTrue(
             match_cleanroom.match( data ),
@@ -292,7 +306,9 @@ class TestAPI( flask_unittest.ClientTestCase ):
         self.assertStatus( rv, 404 )
 
         # Create tag
-        rv = client.put( '/v1/new_tag/09017/foo', auth = USER_PASS )
+        rv = client.put( '/v1/new_tag/09017/foo',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 201 )
 
         rv = client.get( '/check_tag/09017', auth = USER_PASS )
@@ -302,7 +318,9 @@ class TestAPI( flask_unittest.ClientTestCase ):
         self.assertStatus( rv, 404 )
 
         # Edit tag
-        rv = client.post( '/v1/edit_tag/09017/19017', auth = USER_PASS )
+        rv = client.post( '/v1/edit_tag/09017/19017',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 201 )
 
         rv = client.get( '/check_tag/09017', auth = USER_PASS )
@@ -319,14 +337,18 @@ class TestAPI( flask_unittest.ClientTestCase ):
         self.assertStatus( rv, 404 )
 
         # Create tag
-        rv = client.put( '/v1/new_tag/29017/foo', auth = USER_PASS )
+        rv = client.put( '/v1/new_tag/29017/foo',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 201 )
 
         rv = client.get( '/check_tag/29017', auth = USER_PASS )
         self.assertStatus( rv, 200 )
 
         # Edit tag
-        rv = client.post( '/v1/edit_name/29017/bar', auth = USER_PASS )
+        rv = client.post( '/v1/edit_name/29017/bar',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 201 )
 
 

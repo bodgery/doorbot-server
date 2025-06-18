@@ -3,10 +3,24 @@
 {{> top_nav }}
 
 <ul class="menu">
-    <li><a href="/add-tag">Add New RFID</a></li>
-    <li><a href="/view-tag-list">View RFID List</a></li>
-    <li><a href="/search-scan-logs">View Entry Log</a></li>
-    <li><a href="/mp-rfid-report">View MemberPress vs RFID Report</a></li>
+    <li>Member RFID Tags
+    <ul class="menu">
+        <li><a href="/add-tag">Add New RFID</a></li>
+        <li><a href="/view-tag-list">View RFID List</a></li>
+        <li><a href="/search-scan-logs">View Entry Log</a></li>
+    </ul>
+    </li>
+    <li>Controllers
+    <ul class="menu">
+        <li><a href="/controller-list">View Controllers</a></li>
+        <li><a href="/create-oauth">Create OAuth Token</a></li>
+    </ul>
+    </li>
+    <li>Other
+    <ul class="menu">
+        <li><a href="/mp-rfid-report">View MemberPress vs RFID Report</a></li>
+    </ul>
+    </li>
 </ul>
 
 {{> foot }}

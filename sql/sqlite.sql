@@ -35,3 +35,12 @@ CREATE TABLE entry_log (
     location        INT REFERENCES locations (id)
 );
 CREATE INDEX ON entry_log (entry_time DESC);
+
+CREATE TABLE oauth_tokens (
+    id INT PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    token TEXT NOT NULL UNIQUE,
+    expiration_date DATETIME NOT NULL,
+    member_id INT NOT NULL REFERENCES members (id)
+);
+CREATE INDEX ON oauth_tokens (member_id);

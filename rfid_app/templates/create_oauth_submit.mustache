@@ -1,0 +1,19 @@
+{{> head }}
+
+{{> top_nav }}
+
+<p>Copy token into your application. <strong>Token will not be shown again</strong>.</p>
+
+<ul>
+    <li>Name: {{{token_name}}}</li>
+    <li>Expires: {{token_expires}}</li>
+    <li>Token: <input
+        id="token"
+        name="token"
+        value="{{token}}"
+        readonly="1"
+        type="text"
+    ></li>
+</ul>
+
+{{> foot }}

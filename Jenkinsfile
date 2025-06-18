@@ -54,6 +54,8 @@ node {
                     conf.postgresql.port = 5432
                     conf.memberpress.user = 'tmurray@wumpus-cave.net'
                     conf.memberpress.passwd = MMS_PASSWORD
+                    conf.oauth.expires_days = 180
+                    conf.oauth.token_hex_length = 64
                     conf.session.key = session_key
                     conf.build_id = env.BUILD_ID
                     conf.build_branch = env.BRANCH_NAME

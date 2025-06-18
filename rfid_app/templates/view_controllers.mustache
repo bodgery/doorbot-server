@@ -1,0 +1,50 @@
+{{> head }}
+
+{{> top_nav }}
+
+<form action="/controller-group-add" method="POST">
+<p>New Controller Group: <input type="text" id="add_controller_group" name="add_controller_group">
+    <input type="submit" value="Add"></p>
+</form>
+
+<table id="controller_group_table" border="1" cellpadding="2" cellspacing="2">
+    <thead>
+    <tr id="controller_group_table_header">
+        <th>Controller Group</th>
+        <th>Controllers</th>
+        <th>Users</th>
+        <th>Delete Group</th>
+        <th>Edit Controllers</th>
+        <th>Edit Users</th>
+    </tr>
+    </thead>
+
+    {{#controller_groups}}
+    <tbody>
+    <tr>
+        <td> {{controller_group}} </td>
+        <td> {{controllers}} </td>
+        <td> {{user_count}} </td>
+        <td>
+            <form action="/controller-group-delete" method="POST">
+                <input type="hidden" name="del_controller_group" value="{{controller_group}}">
+                <input type="submit" value="Delete Controller Group"
+                    {{#controllers}} disabled {{/controllers}}
+                    {{#user_count}} disabled {{/user_count}}
+                >
+            </form>
+        </td>
+        <td>
+            <a href="/edit-controllers?controller_group={{controller_group}}">Edit Controllers</a>
+        </td>
+        <td>
+            <a href="/edit-group-users?controller_group={{controller_group}}">Edit Users</a>
+        </td>
+    </tr>
+    </tbody>
+    {{/controller_groups}}
+</table>
+
+<p>A Controller Group may only be deleted when it has no Controllers and no Users</p>
+
+{{> foot }}

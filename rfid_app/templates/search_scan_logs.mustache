@@ -3,12 +3,12 @@
 {{> top_nav }}
 
 <form method="GET" action="/search-scan-logs">
-<p>Search for name: <input type="text" id="search_name" name="name">
+<p>Search for name (not yet implemented): <input type="text" id="search_name" name="search_name">
     <input type="submit" value="Search"></p>
 </form>
 
 <form method="GET" action="/search-scan-logs">
-<p>Search for RFID tag: <input type="text" id="search_rfid" name="rfid">
+<p>Search for RFID tag: <input type="text" id="search_rfid" name="search_rfid">
     <input type="submit" value="Search"></p>
 </form>
 
@@ -41,7 +41,8 @@
 </table>
 
 <form method="GET" action="/search-scan-logs">
-    <input type="hidden" name="search_rfid" value="{{rfid}}">
+    <input type="hidden" name="search_name" value="{{search_name}}">
+    <input type="hidden" name="search_rfid" value="{{search_rfid}}">
     <input type="hidden" name="limit" value="{{limit}}">
     <input type="hidden" name="offset" value="{{next_offset}}">
 

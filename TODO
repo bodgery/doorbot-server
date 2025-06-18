@@ -1,7 +1,8 @@
 # Future Version
 * Rebuild flask directory layout
 * HTML Tests
-* Oauth2 on API
+* Page to show bearer tokens (names, expire date, NOT values)
+** Option to delete them
 * Page to change password for the logged in user
 * Page to change password for any user
 ** Force them to change their password at next login

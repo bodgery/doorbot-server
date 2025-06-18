@@ -53,6 +53,11 @@ def set_error(
     response.set_data( json_data )
     return response
 
+def error_response( msg, status = 400 ):
+    response = flask.make_response()
+    response = set_error( response, msg, status )
+    return response
+
 # From https://stackoverflow.com/questions/2546207/does-sqlalchemy-have-an-equivalent-of-djangos-get-or-create
 def get_or_create(
     session,
@@ -144,11 +149,30 @@ def search_tag_list(
 
 def auth_required( func ):
     def check( *args, **kwargs ):
-        # For now, we only allow these endpoints for testing
-        if 'is_testing' in app.config and app.config[ 'is_testing' ]:
+        #if 'is_testing' in app.config and app.config[ 'is_testing' ]:
+        #    return func( *args, **kwargs )
+
+        auth_header = flask.request.headers.get( 'authorization' )
+        if not auth_header:
+            return error_response( "Invalid authorization", 401 )
+        auth_match = re.search( r"^Bearer\s+(.*)$", auth_header )
+        bearer_str = auth_match.group( 1 ) if auth_match else None
+        if not bearer_str:
+            return error_response( "Invalid authorization", 401 )
+
+        session = get_session()
+        stmt = select( Doorbot.SQLAlchemy.OauthToken ).where(
+            Doorbot.SQLAlchemy.OauthToken.token == bearer_str
+        )
+        token = session.scalars( stmt ).one_or_none()
+        session.close()
+
+        # TODO store token somewhere so we can check permissions on an 
+        # endpoint later
+        if token:
             return func( *args, **kwargs )
-        else:
-            return redirect_home()
+
+        return error_response( "Invalid authorization", 401 )
 
     # Avoid error of "View function mapping is overwriting an existing endpoint 
     # function"
@@ -494,7 +518,7 @@ def dump_tags_for_permission( permission ):
         session.close()
         set_error(
             response = response,
-            msg = "Permission " + permission + " was not found",
+            msg = "Location " + permission + " was not found",
             status = 404,
         )
     else:
@@ -600,7 +624,7 @@ def delete_permission( permission, role ):
         session.close()
         set_error(
             response = response,
-            msg = "Permission " + permission + " was not found",
+            msg = "Location " + permission + " was not found",
             status = 404,
         )
     else:

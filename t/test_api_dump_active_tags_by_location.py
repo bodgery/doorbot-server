@@ -11,12 +11,14 @@ import Doorbot.API
 import Doorbot.SQLAlchemy
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from test_oauth_token import add_bearer_token, bearer_header
 
 
 USER_PASS = ( "user", "pass" )
 RFID1 = "1234"
 RFID2 = "2345"
 RFID3 = "3456"
+TOKEN = "0123456789abcdef"
 
 class TestDumpTagsByLocationAPI( flask_unittest.ClientTestCase ):
     app = Doorbot.API.app
@@ -83,6 +85,7 @@ class TestDumpTagsByLocationAPI( flask_unittest.ClientTestCase ):
         })
 
         session = Session( engine )
+        add_bearer_token( TOKEN, members[0], session )
         session.add_all( members )
         session.add_all([
             permission_back_door,
@@ -94,7 +97,9 @@ class TestDumpTagsByLocationAPI( flask_unittest.ClientTestCase ):
         session.commit()
 
     def test_dump_active_tags_for_doors( self, client ):
-        rv = client.get( '/v1/dump_active_tags/back.door', auth = USER_PASS )
+        rv = client.get( '/v1/dump_active_tags/back.door',
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 200 )
 
         data = rv.data.decode( "UTF-8" )
@@ -105,7 +110,8 @@ class TestDumpTagsByLocationAPI( flask_unittest.ClientTestCase ):
 
     def test_dump_active_tags_for_wood( self, client ):
         rv = client.get( '/v1/dump_active_tags/woodshop.tablesaw',
-            auth = USER_PASS )
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 200 )
 
         data = rv.data.decode( "UTF-8" )
@@ -116,5 +122,6 @@ class TestDumpTagsByLocationAPI( flask_unittest.ClientTestCase ):
 
     def test_dump_active_tags_not_found( self, client ):
         rv = client.get( '/v1/dump_active_tags/no_such.permission',
-            auth = USER_PASS )
+            headers = bearer_header( TOKEN )
+        )
         self.assertStatus( rv, 404 )

@@ -11,9 +11,11 @@ import Doorbot.API
 import Doorbot.SQLAlchemy
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from test_oauth_token import add_bearer_token, bearer_header
 
 
 USER_PASS = ( "user", "pass" )
+TOKEN = "0123456789abcdef"
 
 class TestAPIChangePassword( flask_unittest.ClientTestCase ):
     app = Doorbot.API.app
@@ -37,6 +39,7 @@ class TestAPIChangePassword( flask_unittest.ClientTestCase ):
         })
 
         session = Session( engine )
+        add_bearer_token( TOKEN, member, session )
         session.add( member )
         session.commit()
 
@@ -49,7 +52,7 @@ class TestAPIChangePassword( flask_unittest.ClientTestCase ):
         rv = client.put( '/v1/change_passwd/' + USER_PASS[0], data = {
             "new_pass": USER_PASS[1] + "foo",
             "new_pass2": USER_PASS[1] + "foo",
-        })
+        }, headers = bearer_header( TOKEN ) )
         self.assertStatus( rv, 200 )
 
         # Fetch fresh user

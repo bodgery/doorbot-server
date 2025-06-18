@@ -1,0 +1,35 @@
+{{> head }}
+
+{{> top_nav }}
+
+<form action="/controller-add" method="POST">
+<p>New Controller : <input type="text" id="add_controller" name="add_controller">
+    <input type="hidden" name="controller_group" value="{{controller_group}}">
+    <input type="submit" value="Add"></p>
+</form>
+
+<table id="controller_table" border="1" cellpadding="2" cellspacing="2">
+    <thead>
+    <tr id="controller_table_header">
+        <th>Controller</th>
+        <th>Delete Controller</th>
+    </tr>
+    </thead>
+
+    {{#controllers}}
+    <tbody>
+    <tr>
+        <td> {{controller_name}} </td>
+        <td> 
+            <form action="/controller-delete" method="POST">
+                <input type="hidden" name="controller_group" value="{{controller_group}}">
+                <input type="hidden" name="del_controller" value="{{controller_name}}">
+                <input type="submit" value="Delete Controller">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+    {{/controllers}}
+</table>
+
+{{> foot }}

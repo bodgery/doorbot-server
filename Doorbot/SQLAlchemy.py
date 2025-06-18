@@ -157,6 +157,10 @@ class Member( Base ):
         back_populates = "members",
     )
 
+    tokens: Mapped[ List[ "OauthToken" ] ] = relationship(
+        back_populates = "member"
+    )
+
 
     def get_by_tag( tag, session ):
         """Fetch a single member by RFID tag"""
@@ -575,3 +579,28 @@ class Permission( Base ):
         result = query.all()
         session.close()
         return result
+
+class OauthToken( Base ):
+    """Represents an OAuth2 bearer token"""
+    __tablename__ = "oauth_tokens"
+
+    id: Mapped[ int ] = mapped_column( primary_key = True )
+    name: Mapped[ str ] = mapped_column(
+        String(),
+        nullable = False,
+    )
+    token: Mapped[ str ] = mapped_column(
+        String(),
+        nullable = False,
+    )
+    expiration_date: Mapped[ str ] = mapped_column(
+        DateTime(),
+        nullable = False
+    )
+    member_id: Mapped[ int ] = mapped_column(
+        ForeignKey( "members.id" ),
+        nullable = False,
+    )
+    member: Mapped[ "Member" ] = relationship(
+        back_populates = "tokens"
+    )

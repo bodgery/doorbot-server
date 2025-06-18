@@ -22,6 +22,10 @@ session:
   key:
   life_minutes: 60
 
+oauth:
+  expires_days: 180
+  token_hex_length: 64
+
 build_id:
 build_branch:
 build_date:
