@@ -95,26 +95,26 @@ def search_scan_logs( tag, offset, limit):
         where_clause = "WHERE entry_log.rfid = :rfid"
         sql_params[ 'rfid' ] = tag
 
-    conn = get_engine().connect()
-    stmt = text( """
-        SELECT
-            members.full_name AS full_name
-            ,entry_log.rfid AS rfid
-            ,locations.name AS location
-            ,entry_log.entry_time AS entry_time
-            ,entry_log.is_active_tag AS is_active_tag
-            ,entry_log.is_found_tag AS is_found_tag
-        FROM entry_log
-        LEFT OUTER JOIN members ON entry_log.rfid = members.rfid
-        LEFT OUTER JOIN locations ON entry_log.location = locations.id
-    """ + where_clause +
-    """
-        ORDER BY entry_log.entry_time DESC
-        LIMIT :limit
-        OFFSET :offset
-    """ )
+    with get_engine().connect() as conn:
+        stmt = text( """
+            SELECT
+                members.full_name AS full_name
+                ,entry_log.rfid AS rfid
+                ,locations.name AS location
+                ,entry_log.entry_time AS entry_time
+                ,entry_log.is_active_tag AS is_active_tag
+                ,entry_log.is_found_tag AS is_found_tag
+            FROM entry_log
+            LEFT OUTER JOIN members ON entry_log.rfid = members.rfid
+            LEFT OUTER JOIN locations ON entry_log.location = locations.id
+        """ + where_clause +
+        """
+            ORDER BY entry_log.entry_time DESC
+            LIMIT :limit
+            OFFSET :offset
+        """ )
 
-    logs = conn.execute( stmt, sql_params )
+        logs = conn.execute( stmt, sql_params )
     return logs
 
 def search_tag_list(
