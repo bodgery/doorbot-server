@@ -446,6 +446,10 @@ class Location( Base ):
         String(),
         nullable = False,
     )
+    hostname: Mapped[ str ] = mapped_column(
+        String(),
+        nullable = True,
+    )
 
     entries: Mapped[ List[ "EntryLog" ] ] = relationship(
         back_populates = "mapped_location",

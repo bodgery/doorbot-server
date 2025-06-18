@@ -22,7 +22,8 @@ CREATE INDEX members_full_name_trgm_idx ON members
 
 CREATE TABLE locations (
     id SERIAL PRIMARY KEY NOT NULL,
-    name TEXT NOT NULL UNIQUE
+    name TEXT NOT NULL UNIQUE,
+    hostname TEXT
 );
 INSERT INTO locations (name) VALUES
     ( 'cleanroom.door' )
