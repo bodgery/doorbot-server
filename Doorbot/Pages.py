@@ -530,7 +530,8 @@ def search_scan_logs():
 
     logs = Doorbot.API.search_scan_logs( rfid, offset, limit )
 
-    local_tz = pytz.timezone( 'America/Chicago' )
+    tz_name = Doorbot.Config.get( 'timezone' )
+    local_tz = pytz.timezone( tz_name )
 
     def convert_entry( tag ):
         dt = tag.entry_time
