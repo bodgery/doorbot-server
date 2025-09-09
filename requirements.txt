@@ -10,3 +10,4 @@ bcrypt==4.0.1
 sqlalchemy==2.0.23
 flask_stache==0.1.1
 coverage==7.1.0
+pytz==2025.2

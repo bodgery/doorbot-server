@@ -14,6 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.sql import text
 from urllib.parse import urlparse
 import pathlib
+import pytz
 import secrets
 
 
@@ -528,6 +529,24 @@ def search_scan_logs():
         limit = 100
 
     logs = Doorbot.API.search_scan_logs( rfid, offset, limit )
+
+    local_tz = pytz.timezone( 'America/Chicago' )
+
+    def convert_entry( tag ):
+        dt = tag.entry_time
+        # Convert to local time
+        dt = dt.replace( tzinfo = timezone.utc ).astimezone( tz = local_tz )
+        return {
+            'full_name': tag.full_name,
+            'rfid': tag.rfid,
+            'is_active_tag': tag.is_active_tag,
+            'is_found_tag': tag.is_found_tag,
+            #'mms_id': tag.mms_id,
+            'location': tag.location,
+            'entry_time': dt,
+        }
+
+    logs = list ( map( convert_entry, logs ) )
 
     next_offset = offset + limit
 
