@@ -15,7 +15,6 @@
 ** Scan at location
 ** Change in access level
 * Entry log paginates using a GraphQL-style cursor
-* Entry log dates in local time
 * CSS theming
 
 
