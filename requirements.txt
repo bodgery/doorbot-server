@@ -7,7 +7,7 @@ PyYAML==6.0.2
 uWSGI==2.0.30
 requests==2.32.4
 bcrypt==4.0.1
-sqlalchemy==2.0.23
+sqlalchemy==2.0.43
 flask_stache==0.1.1
 coverage==7.1.0
 pytz==2025.2
